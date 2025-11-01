@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Statistik Dasar</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #e74c3c;
+            --accent-color: #f39c12;
+            --bg-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --light-gray: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.2);
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        section {
+            background: white;
+            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+
+        .card {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .interactive-element {
+            background: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: var(--accent-color);
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .result {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .quiz-option {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            background: white;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: var(--light-gray);
+        }
+
+        .quiz-option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .quiz-option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--primary-color);
+            color: white;
+            margin-top: 50px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-chart-bar"></i> Materi Statistik Dasar</h1>
+            <p>Untuk Mahasiswa Pendidikan Matematika</p>
+            <nav>
+                <a href="#pengenalan"><i class="fas fa-info-circle"></i> Pengenalan</a>
+                <a href="#jenis-data"><i class="fas fa-database"></i> Jenis Data</a>
+                <a href="#ukuran-pemusatan"><i class="fas fa-bullseye"></i> Ukuran Pemusatan</a>
+                <a href="#ukuran-penyebaran"><i class="fas fa-expand-arrows-alt"></i> Ukuran Penyebaran</a>
+                <a href="#distribusi-frekuensi"><i class="fas fa-chart-line"></i> Distribusi Frekuensi</a>
+                <a href="#probabilitas"><i class="fas fa-dice"></i> Probabilitas</a>
+                <a href="#inferensial"><i class="fas fa-search"></i> Inferensial</a>
+                <a href="#quiz"><i class="fas fa-question-circle"></i> Quiz</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Pengenalan Statistik -->
+        <section id="pengenalan" class="fade-in">
+            <h2>Pengenalan Statistik</h2>
+            <div class="card">
+                <p><strong>Statistika</strong> adalah ilmu yang mempelajari cara mengumpulkan, menyajikan, menganalisis, dan menafsirkan data.</p>
+                <p>Dalam statistika, kita biasanya berurusan dengan:</p>
+                <ul>
+                    <li><strong>Data</strong>: Informasi yang dikumpulkan</li>
+                    <li><strong>Populasi</strong>: Keseluruhan objek yang diteliti</li>
+                    <li><strong>Sample</strong>: Bagian dari populasi yang diamati</li>
+                </ul>
+            </div>
+            
+            <div class="interactive-element">
+                <h3>Coba Perhatikan!</h3>
+                <p>Berapa banyak siswa yang ada di kelas Anda? Itu adalah populasi kecil. Jika kita ingin mengetahui rata-rata tinggi badan semua siswa di Indonesia, itu adalah populasi besar yang sulit untuk diobservasi secara lengkap.</p>
+                <button class="btn" onclick="showNotification('Contoh statistik sehari-hari: Rating film, suhu harian, nilai ujian')">
+                    <i class="fas fa-lightbulb"></i> Contoh Lain
+                </button>
+            </div>
+        </section>
+
+        <!-- Jenis Data -->
+        <section id="jenis-data" class="fade-in">
+            <h2>Jenis-Jenis Data</h2>
+            <div class="card">
+                <h3>Data Kuantitatif</h3>
+                <p>Data yang dapat diukur dan dinyatakan dalam angka.</p>
+                <ul>
+                    <li><strong>Kontinu</strong>: Dapat mengambil nilai desimal (tinggi badan, berat badan)</li>
+                    <li><strong>Diskrit</strong>: Hanya bilangan bulat (jumlah anak, jumlah buku)</li>
+                </ul>
+                
+                <h3>Data Kualitatatif</h3>
+                <p>Data yang tidak dapat diukur secara numerik tetapi dapat digolongkan.</p>
+                <ul>
+                    <li><strong>Nominal</strong>: Tanpa urutan (warna mata, jenis kelamin)</li>
+                    <li><strong>Ordinal</strong>: Dengan urutan (peringkat, skala satisfaksi)</li>
+                </ul>
+            </div>
+            
+            <div class="interactive-element">
+                <h3>Identifikasi Jenis Data</h3>
+                <div class="input-group">
+                    <label for="data-example">Pilih contoh data:</label>
+                    <select id="data-example" onchange="identifyDataType()">
+                        <option value="">-- Pilih Contoh --</option>
+                        <option value="tinggi-badan">Tinggi badan siswa (170 cm)</option>
+                        <option value="jenis-kelamin">Jenis kelamin (L/P)</option>
+                        <option value="nilai-uas">Nilai UAS Matematika (85)</option>
+                        <option value="warna-mobil">Warna mobil (Merah/Kuning/Biru)</option>
+                        <option value="skor-satisfaksi">Skor kepuasan pelanggan (1-5 bintang)</option>
+                    </select>
+                </div>
+                <div id="data-result" class="result"></div>
+            </div>
+        </section>
+
+        <!-- Ukuran Pemusatan -->
+        <section id="ukuran-pemusatan" class="fade-in">
+            <h2>Ukuran Pemusatan (Tendensi Sentral)</h2>
+            <div class="card">
+                <h3>Rata-rata (Mean)</h3>
+                <p>Hasil bagi jumlah semua nilai dengan banyaknya nilai.</p>
+                <p>Formula: <span style="font-style: italic;">x̄ = Σx / n</span></p>
+                
+                <h3>Median</h3>
+                <p>Nilai tengah ketika data diurutkan.</p>
+                
+                <h3>Modus</h3>
+                <p>Nilai yang paling sering muncul.</p>
+            </div>
+            
+            <div class="interactive-element">
+                <h3>Kalkulator Rata-rata</h3>
+                <div class="input-group">
+                    <label for="data-input">Masukkan data (pisahkan dengan koma):</label>
+                    <input type="text" id="data-input" placeholder="Contoh: 75,80,85,90,95">
+                </div>
+                <button class="btn" onclick="calculateMean()">Hitung Rata-rata</button>
+                <div id="mean-result" class="result"></div>
+                
+                <div class="input-group">
+                    <label for="median-data">Data untuk Median:</label>
+                    <input type="text" id="median-data" placeholder="Contoh: 65,70,72,78,80,82,85">
+                </div>
+                <button class="btn btn-secondary" onclick="calculateMedian()">Hitung Median</button>
+                <div id="median-result" class="result"></div>
+            </div>
+        </section>
+
+        <!-- Ukuran Penyebaran -->
+        <section id="ukuran-penyebaran" class="fade-in">
+            <h2>Ukuran Penyebaran (Variabilitas)</h2>
+            <div class="card">
+                <h3>Rentang (Range)</h3>
+                <p>Selisih antara nilai maksimum dan minimum.</p>
+                <p>Formula: <span style="font-style: italic;">R = x_max - x_min</span></p>
+                
+                <h3>Deviasi Standar</h3>
+                <p>Ukuran seberapa jauh data tersebar dari rata-rata.</p>
+                <p>Formula: <span style="font-style: italic;">σ = √[Σ(x_i - μ)² / N]</span></p>
+                
+                <h3>Variansi</h3>
+                <p>Kuadrat dari deviasi standar.</p>
+            </div>
+            
+            <div class="interactive-element">
+                <h3>Visualisasi Penyebaran Data</h3>
+                <div class="input-group">
+                    <label for="spread-data">Masukkan data untuk visualisasi:</label>
+                    <input type="text" id="spread-data" placeholder="Contoh: 55,60,65,70,75,80,85,90,95,100">
+                </div>
+                <button class="btn" onclick="visualizeSpread()">Visualisasikan</button>
+                <div class="chart-container">
+                    <canvas id="spreadChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Distribusi Frekuensi -->
+        <section id="distribusi-frekuensi" class="fade-in">
+            <h2>Distribusi Frekuensi</h2>
+            <div class="card">
+                <p>Distribusi frekuensi adalah tabel yang menunjukkan berapa kali setiap nilai atau rentang nilai muncul dalam dataset.</p>
+                <p>Tujuannya adalah untuk menyederhanakan data mentah sehingga pola distribusi lebih jelas terlihat.</p>
+            </div>
+            
+            <div class="interactive-element">
+                <h3>Buat Tabel Distribusi Frekuensi</h3>
+                <div class="input-group">
+                    <label for="freq-data">Masukkan data (pisahkan dengan koma):</label>
+                    <input type="text" id="freq-data" placeholder="Contoh: 52,58,62,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97">
+                </div>
+                <div class="input-group">
+                    <label for="class-width">Lebar Kelas:</label>
+                    <input type="number" id="class-width" value="5" min="1">
+                </div>
+                <button class="btn" onclick="generateFrequencyTable()">Buat Tabel</button>
+                <div id="frequency-table" class="result"></div>
+            </div>
+        </section>
+
+        <!-- Probabilitas -->
+        <section id="probabilitas" class="fade-in">
+            <h2>Probabilitas Dasar</h2>
+            <div class="card">
+                <h3>Definisi</h3>
+                <p>Probabilitas adalah ukuran kemungkinan suatu kejadian terjadi, dinyatakan sebagai angka antara 0 dan 1.</p>
+                <p>Formula klasik: <span style="font-style: italic;">P(A) = n(A) / n(S)</span></p>
+                <p>di mana:</p>
+                <ul>
+                    <li><strong>n(A)</strong>: Jumlah hasil yang menguntungkan</li>
+                    <li><strong>n(S)</strong>: Jumlah semua hasil mungkin</li>
+                </ul>
+            </div>
+            
+            <div class="interactive-element">
+                <h3>Kalkulator Probabilitas</h3>
+                <div class="input-group">
+                    <label for="event-count">Jumlah hasil yang menguntungkan:</label>
+                    <input type="number" id="event-count" value="3" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="total-outcomes">Jumlah total hasil mungkin:</label>
+                    <input type="number" id="total-outcomes" value="6" min="1">
+                </div>
+                <button class="btn" onclick="calculateProbability()">Hitung Probabilitas</button>
+                <div id="probability-result" class="result"></div>
+            </div>
+        </section>
+
+        <!-- Inferensial Statistik -->
+        <section id="inferensial" class="fade-in">
+            <h2>Inferensial Statistik</h2>
+            <div class="card">
+                <h3>Apa itu?</h3>
+                <p>Inferensial statistik adalah proses membuat kesimpulan tentang populasi berdasarkan informasi dari sampel.</p>
+                <p>Beberapa teknik umum:</p>
+                <ul>
+                    <li>Uji hipotesis</li>
+                    <li>Estimasi interval</li>
+                    <li>Analisis regresi</li>
+                </ul>
+            </div>
+            
+            <div class="interactive-element">
+                <h3>Contoh Inferensial</h3>
+                <p>Jika kita mengambil sampel 100 siswa dan mendapatkan rata-rata nilai ujian 78 dengan deviasi standar 8, maka kita dapat menyimpulkan bahwa rata-rata nilai seluruh siswa sekolah tersebut berada dalam rentang tertentu.</p>
+                <button class="btn" onclick="showInferenceExample()">Lihat Contoh Lebih Lanjut</button>
+            </div>
+        </section>
+
+        <!-- Quiz Interaktif -->
+        <section id="quiz" class="fade-in">
+            <h2>Quiz Statistik Dasar</h2>
+            <div class="card">
+                <p>Uji pengetahuan Anda dengan quiz interaktif ini!</p>
+            </div>
+            
+            <div class="interactive-element">
+                <div id="quiz-container">
+                    <div class="quiz-question">
+                        <p><strong>Soal 1:</strong> Apa yang dimaksud dengan "rata-rata" dalam statistik?</p>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'benar')">A. Hasil bagi jumlah semua nilai dengan banyaknya nilai</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'salah')">B. Nilai tengah ketika data diurutkan</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'salah')">C. Nilai yang paling sering muncul</div>
+                    </div>
+                    
+                    <div class="quiz-question">
+                        <p><strong>Soal 2:</strong> Data "jenis kelamin" termasuk jenis data apa?</p>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'salah')">A. Kuantitatif kontinu</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'benar')">B. Kualitatif nominal</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'salah')">C. Kuantitatif diskrit</div>
+                    </div>
+                    
+                    <div class="quiz-question">
+                        <p><strong>Soal 3:</strong> Rentang (range) dihitung dengan...</p>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'salah')">A. Menambahkan semua nilai</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'benar')">B. Mengurangkan nilai maksimum dengan nilai minimum</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'salah')">C. Mencari nilai yang paling sering muncul</div>
+                    </div>
+                    <iframe src="https://emodulharry-ymb6mgalmauhtrbreud7ve.streamlit.app/?embed=true"
+                    width="100%"
+                    height="1000"
+                    style="border:none;">
+                    </iframe>
+
+                </div>
+                
+                <div id="quiz-score" class="result" style="display: none;">
+                    Skor Anda: <span id="score-value">0</span>/3
+                </div>
+                <button class="btn" onclick="resetQuiz()" style="margin-top: 15px;">Mulai Ulang Quiz</button>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Materi Statistik Dasar | Didesain untuk Mahasiswa Pendidikan Matematika</p>
+            <p>Dibuat dengan <i class="fas fa-heart" style="color: #e74c3c;"></i> oleh Tim Pembelajaran</p>
+        </div>
+    </footer>
+
+    <script>
+        // Fungsi untuk notifikasi
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('success', 'show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Fungsi identifikasi jenis data
+        function identifyDataType() {
+            const example = document.getElementById('data-example').value;
+            const resultDiv = document.getElementById('data-result');
+            
+            let dataType = '';
+            switch(example) {
+                case 'tinggi-badan':
+                    dataType = 'Kuantitatif Kontinu';
+                    break;
+                case 'jenis-kelamin':
+                    dataType = 'Kualitatif Nominal';
+                    break;
+                case 'nilai-uas':
+                    dataType = 'Kuantitatif Diskrit';
+                    break;
+                case 'warna-mobil':
+                    dataType = 'Kualitatif Nominal';
+                    break;
+                case 'skor-satisfaksi':
+                    dataType = 'Kualitatif Ordinal';
+                    break;
+                default:
+                    dataType = 'Silakan pilih contoh!';
+            }
+            
+            resultDiv.innerHTML = `<strong>Jenis Data:</strong> ${dataType}`;
+        }
+
+        // Fungsi hitung rata-rata
+        function calculateMean() {
+            const dataInput = document.getElementById('data-input').value;
+            if (!dataInput.trim()) {
+                showNotification('Masukkan data terlebih dahulu!');
+                return;
+            }
+            
+            const data = dataInput.split(',').map(num => parseFloat(num.trim()));
+            const sum = data.reduce((acc, val) => acc + val, 0);
+            const mean = sum / data.length;
+            
+            document.getElementById('mean-result').innerHTML = 
+                `Rata-rata: <strong>${mean.toFixed(2)}</strong>`;
+        }
+
+        // Fungsi hitung median
+        function calculateMedian() {
+            const dataInput = document.getElementById('median-data').value;
+            if (!dataInput.trim()) {
+                showNotification('Masukkan data terlebih dahulu!');
+                return;
+            }
+            
+            const data = dataInput.split(',').map(num => parseFloat(num.trim())).sort((a, b) => a - b);
+            const mid = Math.floor(data.length / 2);
+            
+            let median;
+            if (data.length % 2 === 0) {
+                median = (data[mid - 1] + data[mid]) / 2;
+            } else {
+                median = data[mid];
+            }
+            
+            document.getElementById('median-result').innerHTML = 
+                `Median: <strong>${median}</strong>`;
+       }
+
+        // Fungsi visualisasi penyebaran
+        let spreadChart = null;
+
+        function visualizeSpread() {
+            const dataInput = document.getElementById('spread-data').value;
+            if (!dataInput.trim()) {
+                showNotification('Masukkan data terlebih dahulu!');
+                return;
+            }
+            
+            const data = dataInput.split(',').map(num => parseFloat(num.trim()));
+            const labels = data.map((_, i) => `Data ${i+1}`);
+            
+            if (spreadChart) {
+                spreadChart.destroy();
+            }
+            
+            const ctx = document.getElementById('spreadChart').getContext('2d');
+            spreadChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nilai Data',
+                        data: data,
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fungsi generate tabel distribusi frekuensi
+        function generateFrequencyTable() {
+            const dataInput = document.getElementById('freq-data').value;
+            const classWidth = parseInt(document.getElementById('class-width').value);
+            
+            if (!dataInput.trim()) {
+                showNotification('Masukkan data terlebih dahulu!');
+                return;
+            }
+            
+            const data = dataInput.split(',').map(num => parseFloat(num.trim())).sort((a, b) => a - b);
+            const minVal = Math.min(...data);
+            const maxVal = Math.max(...data);
+            
+            const classes = [];
+            const frequencies = [];
+            let currentLowerBound = minVal;
+            
+            while (currentLowerBound <= maxVal) {
+                const upperBound = currentLowerBound + classWidth - 1;
+                const frequency = data.filter(val => val >= currentLowerBound && val <= upperBound).length;
+                
+                classes.push(`${currentLowerBound} - ${upperBound}`);
+                frequencies.push(frequency);
+                
+                currentLowerBound += classWidth;
+            }
+            
+            let tableHTML = '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">';
+            tableHTML += '<tr><th>Kelas</th><th>Frekuensi</th></tr>';
+            
+            for (let i = 0; i < classes.length; i++) {
+                tableHTML += `<tr><td>${classes[i]}</td><td>${frequencies[i]}</td></tr>`;
+            }
+            
+            tableHTML += '</table>';
+            document.getElementById('frequency-table').innerHTML = tableHTML;
+        }
+
+        // Fungsi hitung probabilitas
+        function calculateProbability() {
+            const eventCount = parseInt(document.getElementById('event-count').value);
+            const totalOutcomes = parseInt(document.getElementById('total-outcomes').value);
+            
+            if (isNaN(eventCount) || isNaN(totalOutcomes) || totalOutcomes === 0) {
+                showNotification('Masukkan nilai yang valid!');
+                return;
+            }
+            
+            const probability = eventCount / totalOutcomes;
+            document.getElementById('probability-result').innerHTML = 
+                `Probabilitas: <strong>${probability.toFixed(4)} (${(probability * 100).toFixed(2)}%)</strong>`;
+        }
+
+        // Fungsi tampilkan contoh inferensial
+        function showInferenceExample() {
+            showNotification('Contoh: Dengan confidence level 95%, kita dapat menyimpulkan bahwa rata-rata nilai seluruh siswa berada antara 76 dan 80.');
+        }
+
+        // Variabel skor quiz
+        let score = 0;
+        let answeredQuestions = 0;
+
+        // Fungsi cek jawaban quiz
+        function checkAnswer(element, correct) {
+            const question = element.parentElement;
+            const options = question.querySelectorAll('.quiz-option');
+            
+            options.forEach(opt => opt.classList.remove('correct', 'incorrect'));
+            
+            if (correct === 'benar') {
+                element.classList.add('correct');
+                if (answeredQuestions < 3) {
+                    score++;
+                }
+            } else {
+                element.classList.add('incorrect');
+            }
+            
+            answeredQuestions++;
+            
+            if (answeredQuestions === 3) {
+                document.getElementById('score-value').textContent = score;
+                document.getElementById('quiz-score').style.display = 'block';
+            }
+        }
+
+        // Fungsi reset quiz
+        function resetQuiz() {
+            score = 0;
+            answeredQuestions = 0;
+            document.getElementById('quiz-score').style.display = 'none';
+            
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.classList.remove('correct', 'incorrect'));
+        }
+
+        // Animasi fade in saat scroll
+        function handleScrollAnimation() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Event listener untuk scroll
+        window.addEventListener('scroll', handleScrollAnimation);
+        
+        // Panggil fungsi sekali saat load
+        handleScrollAnimation();
+
+        // Efek pulsate pada tombol
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.classList.add('pulse');
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.classList.remove('pulse');
+            });
+        });
+    </script>
+</body>
+</html>
